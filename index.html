@@ -1,0 +1,150 @@
+<!--
+ * Filename: index.html
+ * Filepath: /index.html
+ * 
+ * The entry point for the game in the browser. Much like the Total Perspective Vortex,
+ * this file shows you exactly how small and insignificant you are in the grand
+ * scheme of the universe, but with considerably less existential dread and more
+ * JavaScript errors.
+ *
+ * SIMPLIFIED VERSION: Uses ES modules directly in the browser
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitchhiker's Guide to the Galaxy Platformer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            border: 2px solid #42f5e3;
+            box-shadow: 0 0 20px rgba(66, 245, 227, 0.5);
+        }
+
+        #loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000000;
+            z-index: 10;
+        }
+
+        #dont-panic {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff0000;
+            animation: pulsate 2s infinite;
+        }
+
+        #loading-text {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #42f5e3;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulsate {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        #credits {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="loading">
+            <div id="dont-panic">DON'T PANIC</div>
+            <div class="spinner"></div>
+            <div id="loading-text">Loading the Infinite Improbability Drive...</div>
+        </div>
+    </div>
+    
+    <div id="credits">
+        Inspired by Douglas Adams' "The Hitchhiker's Guide to the Galaxy" &copy; <br>
+        Not affiliated with the official franchise. Created for educational purposes only.
+    </div>
+
+    <!-- Load Phaser -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    
+    <!-- Load the simplified game -->
+    <script type="module">
+        import GameScene from './src/scenes/GameScene.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create the main game configuration
+            const config = {
+                type: Phaser.AUTO,
+                width: 800,
+                height: 600,
+                backgroundColor: '#000000',
+                physics: {
+                    default: 'arcade',
+                    arcade: {
+                        gravity: { y: 980 },
+                        debug: false
+                    }
+                },
+                scene: [GameScene]
+            };
+
+            // Initialize the game
+            const game = new Phaser.Game(config);
+            window.game = game;
+
+            // Hide loading screen after a short delay
+            setTimeout(() => {
+                const loadingElement = document.getElementById('loading');
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
+            }, 2000);
+
+            console.log('Game initialized. If anything explodes, it\'s probably supposed to.');
+        });
+    </script>
+</body>
+</html>
